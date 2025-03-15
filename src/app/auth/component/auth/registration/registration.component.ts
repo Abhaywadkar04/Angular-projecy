@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { passwordMatchValidator } from '../../../utlis/passwordValidators';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { passwordMatchValidator } from '../../../utlis/passwordValidators';
 export class RegistrationComponent {
 
   registerForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
     this.registerForm = this.formBuilder.group({
       name: ['',[Validators.required, Validators.minLength(3)]],
       email: ['',[Validators.required, Validators.email]],  
@@ -32,6 +33,7 @@ export class RegistrationComponent {
           console.log('Success' + this.registerForm.value);
           //this will not be able to print the object, so write the following code
           console.log('Success' + JSON.stringify(this.registerForm.value));
+    this.authService.registerUser(this.registerForm.value).subscribe((response)=>console.log(response));
         } else {
           console.log(this.registerForm.errors);
           this.printErrors();
